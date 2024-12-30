@@ -7,6 +7,7 @@ import com.catdog.comerce.dto.response.ResponseFoodDto;
 import com.catdog.comerce.dto.response.ResponseHygieneDto;
 import com.catdog.comerce.dto.response.ResponseProductDto;
 import com.catdog.comerce.entity.*;
+import com.catdog.comerce.exception.NotFoundException;
 import com.catdog.comerce.repository.*;
 import com.catdog.comerce.service.IAccesoryService;
 import com.catdog.comerce.service.IFoodService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -108,6 +110,24 @@ public class ProductServiceImpl extends CrudServiceImpl<ProductDto, Product,Long
         if (value<=0) throw new IllegalArgumentException("value must be greater than 0");
         long adjustLimit = Math.min(value, productRepo.countAllProducts());
         return productRepo.bestSellingProducts(adjustLimit);
+    }
+
+    @Override
+    public ResponseProductDto findProductById(Long id) {
+        Product product = productRepo.findById(id).orElseThrow(()-> new NotFoundException("producto",id));
+
+        if (product instanceof Food){
+            return mapperUtil.map(product, ResponseFoodDto.class);
+        }
+
+        if (product instanceof Accesory){
+            return mapperUtil.map(product, ResponseAccesoryDto.class);
+        }
+
+        if (product instanceof Hygiene){
+            return mapperUtil.map(product, ResponseHygieneDto.class);
+        }
+        throw new IllegalArgumentException("Product type not supported");
     }
 
 

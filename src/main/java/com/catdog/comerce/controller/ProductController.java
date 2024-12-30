@@ -67,8 +67,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GenericResponse<ResponseProductDto>> getProductById(@PathVariable Long id) {
-        ResponseProductDto responseProductDto = mapperUtil.map(productService.getById(id),ResponseProductDto.class);
-        return new ResponseEntity<>(new GenericResponse<>(200,"success", Arrays.asList(responseProductDto)),HttpStatus.OK);
+
+        return new ResponseEntity<>(new GenericResponse<>(200,"success", Arrays.asList(productService.findProductById(id))),HttpStatus.OK);
     }
 
 }
