@@ -62,16 +62,4 @@ public class BrandController {
         return new ResponseEntity<>(new GenericResponse<ResponseBrandDto>(200,"success",Arrays.asList(responseBrandDto)),HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GenericResponse<ResponseBrandDto>> getBrandById(@PathVariable Long id) {
-        ResponseBrandDto responseBrandDto = mapperUtil.map(brandService.getById(id),ResponseBrandDto.class);
-        return new ResponseEntity<>(new GenericResponse<>(200,"success", Arrays.asList(responseBrandDto)),HttpStatus.OK);
-    }
-
-
-
-
-
-
-
 }
