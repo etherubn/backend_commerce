@@ -1,4 +1,4 @@
 package com.catdog.comerce.dto.response;
 
-public record JwtResponse(String jwtToken) {
+public record JwtResponse(String jwtToken,String username) {
 }

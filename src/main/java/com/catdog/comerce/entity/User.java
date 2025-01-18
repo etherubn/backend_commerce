@@ -67,6 +67,14 @@ public class User {
         creationDate = LocalDateTime.now();
         purchaseAmount = 0;
         enableBuyer = username.equals("admin");
+        username = username.toLowerCase();
+        email = email.toLowerCase();
+    }
+
+    @PreUpdate
+    public void setBeforeUpdate(){
+        username = username.toLowerCase();
+        lastName = lastName.toLowerCase();
     }
 
 

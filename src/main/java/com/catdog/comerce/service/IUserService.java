@@ -9,4 +9,6 @@ import java.util.List;
 public interface IUserService extends ICrudService<UserDto,Long>{
     ResponseUserDto updateInformation(UserDto userDto, Long id);
     List<ResponseUserDto> findAllUsers();
+    boolean findByUsername(String username);
+    boolean existByEmail(String email);
 }

@@ -13,12 +13,14 @@ import com.catdog.comerce.repository.UserRepo;
 import com.catdog.comerce.security.utils.JwtTokenUtils;
 import com.catdog.comerce.service.IAuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,10 +54,8 @@ public class AuthServiceImpl implements IAuthService {
         Role role = roleRepo.findByType(RoleType.USER)
                         .orElseThrow(()-> new NotFoundException("role",0L));
         user.setRole(Set.of(role));
-
         userRepo.save(user);
-
-        return "User register successful";
+        return "Usuario registrado con éxito";
     }
 
     private Map<String,Object> validateRegisterData(RegisterDto registerDto) {
@@ -75,13 +75,26 @@ public class AuthServiceImpl implements IAuthService {
     @Transactional
     public JwtResponse login(LoginDto loginDto) throws Exception {
         //Verifica la autenticacion
-        authenticate(loginDto.username(), loginDto.password());
+        try{
+            authenticate(loginDto.username(), loginDto.password());
+        }catch (Exception e) {
+            // Manejo de excepciones específicas para usuario o contraseña
+            if (e instanceof UsernameNotFoundException) {
+                throw new Exception("Usuario no encontrado", e);
+            } else if (e instanceof BadCredentialsException) {
+                throw new Exception("Contraseña incorrecta", e);
+            } else {
+                throw new Exception("Error de autenticación", e);
+            }
+        }
+
 
         //Si está autenticado carga los datos de usuario
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.username());
+
         //Genera el token
 
-        return new JwtResponse(jwtTokenUtil.generateToken(userDetails));
+        return new JwtResponse(jwtTokenUtil.generateToken(userDetails),userDetails.getUsername());
     }
 
     private void authenticate(String username, String password) throws Exception {

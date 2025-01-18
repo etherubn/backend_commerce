@@ -11,9 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends RepoGeneric<User,Long> {
    boolean existsByDni(String dni);
-   Optional<User> findByDni(String dni);
-   Optional<User> findByEmail(String email);
-   Optional<User> findByUsername(String username);
    Optional<User> findOneByUsername(String email);
    boolean existsByUsername(String username);
    boolean existsByEmail(String email);

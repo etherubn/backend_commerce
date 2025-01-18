@@ -87,4 +87,22 @@ public class UserServiceImpl extends CrudServiceImpl<UserDto, User,Long> impleme
                     return responseUserDto;
                 }).toList();
     }
+
+    @Override
+    public boolean findByUsername(String username) {
+        if (username.isBlank() || username.length()<=3 || username.length()>12 ) {
+            throw new IllegalArgumentException("Error with the username");
+        }
+
+        return userRepo.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existByEmail(String email) {
+        if (email.isBlank()) {
+            throw new IllegalArgumentException("Error with the email");
+        }
+
+        return userRepo.existsByEmail(email);
+    }
 }

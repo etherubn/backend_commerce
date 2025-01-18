@@ -52,10 +52,13 @@ public class UserController {
         return new ResponseEntity<>(new GenericResponse<>(200,"success",Arrays.asList(userService.updateInformation(userDto,id))),HttpStatus.OK);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<GenericResponse<Boolean>> findUserByUsername(@PathVariable String username){
+      return new ResponseEntity<>(new GenericResponse<>(200,"succes",Arrays.asList(userService.findByUsername(username))),HttpStatus.OK);
+    }
 
-
-
-
-
-
+    @GetMapping("/email/{email}")
+    public ResponseEntity<GenericResponse<Boolean>> findUserByEmail(@PathVariable String email){
+        return new ResponseEntity<>(new GenericResponse<>(200,"succes",Arrays.asList(userService.existByEmail(email))),HttpStatus.OK);
+    }
 }

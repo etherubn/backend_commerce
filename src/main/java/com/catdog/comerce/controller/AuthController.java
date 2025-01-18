@@ -26,7 +26,7 @@ public class AuthController {
     @PreAuthorize("permitAll()")
     @PostMapping("/register")
     public ResponseEntity<GenericResponse<String>> register(@RequestBody @Valid RegisterDto registerDto) {
-        return new ResponseEntity<>(new GenericResponse<>(200, authService.register(registerDto),null ), HttpStatus.OK);
+        return new ResponseEntity<>(new GenericResponse<>(200, "success",Arrays.asList(authService.register(registerDto)) ), HttpStatus.OK);
     }
 
     @PreAuthorize("permitAll()")
